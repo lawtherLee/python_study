@@ -21,3 +21,38 @@
 # |    ======================================================|
 # |    佛祖保佑         永不宕机         永无BUG              |
 # |__________________________________________________________|
+from method import *
+
+
+def main():
+    # 一上来先加载所有数据
+    read_book_file()
+    # login
+    if not admin_login():
+        return
+    while True:
+        print_info()
+        try:
+            num = int(input("请输入选项(1-6)："))
+        except ValueError:
+            print("输入的选项有误")
+            continue
+        if num == 1:
+            add_info()
+        elif num == 2:
+            delete_info()
+        elif num == 3:
+            update_info()
+        elif num == 4:
+            search_info()
+        elif num == 5:
+            search_all_info()
+        elif num == 6:
+            print("感谢使用")
+            break
+        else:
+            print("输入的选项有误")
+
+
+if __name__ == "__main__":
+    main()

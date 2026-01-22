@@ -57,5 +57,106 @@ def print_info():
     print("================================")
 
 
+def add_info() -> None:
+    # 如果没有图书数据，则设置编号从1开始
+    new_id = max([book["编号"] for book in books]) + 1 if books else 1
+    name = input("请输入图书名称：").strip()
+    price1 = input("请输入图书价格: ").strip()
+    # 价格默认0
+    price = float(price1) if price1 else 0
+    was_lend = input("请输入图书出租状态【是/否】: ").strip()
+    status = 1 if was_lend == "是" else 0
+
+    new_book = {
+        "编号": new_id,
+        "书名": name,
+        "价格": price,
+        "出租状态": status,
+    }
+    books.append(new_book)
+
+    print(f"书籍《{name}》添加成功！")
+
+
+def delete_info() -> None:
+    """根据编号删除书籍"""
+    try:
+        book_id = int(input("请输入要删除的图书编号："))
+        for book in books:
+            if book["编号"] == book_id:
+                if book["出租状态"]:
+                    print(f"《{book['书名']}》正在出租中，无法删除")
+                    return
+                books.remove(book)
+                print(f"编号{book_id}的书籍已删除！")
+                return
+        print(f"编号{book_id}的图书不存在")
+    except ValueError:
+        print("输入的编号有误")
+        return
+
+
+def update_info() -> None:
+    """修改书籍信息"""
+    try:
+        book_id = int(input("请输入要修改的图书编号："))
+        for book in books:
+            if book["编号"] == book_id:
+                print(
+                    f"当前书籍信息：书名={book['书名']}，价格={book['价格']}，出租状态={book['出租状态']}"
+                )
+                new_name = input("请输入新的图书名称：").strip()
+                if new_name:
+                    book["书名"] = new_name
+                    print(f"书名已更新为：{new_name}")
+                new_price = input("请输入新的图书价格：").strip()
+                if new_price:
+                    try:
+                        new_price_float = float(new_price)
+                        if new_price_float < 0:
+                            print("价格不能小于0")
+                        else:
+                            book["价格"] = new_price_float
+                            print(f"价格已更新为：{new_price_float}")
+                    except ValueError:
+                        print("输入的图书价格有误")
+                new_status = input("请输入新的图书出租状态【是/否】：").strip()
+                if new_status:
+                    status = 1 if new_status == "是" else 0
+                    book["出租状态"] = status
+                    print(f"出租状态已更新为：{new_status}")
+
+                print(f"\n编号{book_id}的书籍信息修改完成！")
+                return
+        print(f"编号{book_id}的图书不存在")
+    except ValueError:
+        print("输入的编号有误")
+        return
+
+
+def search_info() -> None:
+    name = input("请输入要查询的图书名称：").strip()
+    for book in books:
+        if book["书名"] == name:
+            print(
+                f"编号：{book['编号']}，书名：{book['书名']}，价格：{book['价格']}，出租状态：{book['出租状态']}"
+            )
+            return
+    print(f"图书《{name}》不存在")
+
+
+def search_all_info() -> None:
+    if not books:
+        print("暂无数据")
+        return
+    print("\n===== 所有书籍信息 =====")
+    for book in books:
+        price = float(book["价格"])
+        print(
+            f"编号：{book['编号']}，书名：{book['书名']}，价格：{price:.2f}，出租状态：{'已出租' if book['出租状态'] else '未出租'}"
+        )
+    print("=======================")
+
+
 if __name__ == "__main__":
     read_book_file()
