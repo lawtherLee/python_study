@@ -6,15 +6,17 @@ def quick_sort(arr, start, end):
     """
     if start >= end:
         return None
-    # 起始和结束索引
+    # 边界值
     left = start
     right = end
     # 分界值
     pivot = arr[start]
     while left < right:
+        # 右指针
         while arr[right] >= pivot and left < right:
             right -= 1
         arr[left] = arr[right]
+        # 左指针
         while arr[left] <= pivot and left < right:
             left += 1
         arr[right] = arr[left]
